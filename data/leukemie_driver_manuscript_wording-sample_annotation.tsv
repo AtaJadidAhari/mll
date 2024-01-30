@@ -1,0 +1,25 @@
+Cohort	Cohort abbreviation	Number of samples per cohort	Study group	Number of samples per study group	Cohort during analysis	Cohort German abbreviation	Study group during analysis
+Acute myeloid leukemia	AML	730	AML	730	AML	AML	AML
+Myelodysplastic neoplasm	MDS	713	MDS	713	MDS	MDS	MDS
+Marginal zone lymphoma	MZL	71	MatureB group	375	MZL	MZL	Lym_group
+Mantle cell lymphoma	MCL	71	MatureB group	375	MCL	MCL	Lym_group
+High-grade B-cell lymphoma	HGBL	61	MatureB group	375	HGBL	HGBL	Lym_group
+Lymphoplasmacytic lymphoma	LPL	59	MatureB group	375	LPL	LPL	Lym_group
+Follicular lymphoma	FL	57	MatureB group	375	FL	FL	Lym_group
+Other B-cell non-Hodgkin lymphomas	B-NHL	56	MatureB group	375	B-NHL	B-NHL	Lym_group
+Myeloproliferative neoplasm	MPN	344	MPN	344	MPN	MPN	MPN
+Chronic lymphocytic leukemia	CLL	279	CLL	279	CLL	CLL	CLL
+Multiple myeloma	MM	236	PCN group	247	Multiples Myelom	MM	MACS_group
+Monoclonal gammopathy of undetermined significance	MGUS	11	PCN group	247	MGUS	MGUS	MACS_group
+Myelodysplastic/myeloproliferative neoplasm, unclassifiable	MDS/MPN-U	81	MDS/MPN group	207	MDS/MPN-U	MDS/MPN-U	MDS_MPN_group
+Atypical chronic myeloid leukemia	aCML	67	MDS/MPN group	207	aCML	aCML	MDS_MPN_group
+Myelodysplastic/myeloproliferative neoplasm with ring sideroblasts and thrombocytosis	MDS/MPN-RS-T	59	MDS/MPN group	207	MDS/MPN-RS-T	MDS/MPN-RS-T	MDS_MPN_group
+B-cell precursor acute lymphoblastic leukemia	BCP-ALL	204	BCP-ALL	204	BCP-ALL	BCP-ALL	BCP_ALL
+T-cell non-Hodgkin lymphoma	T-NHL	90	T-cell group	174	T-NHL	T-NHL	TL_group
+T-cell acute lymphoblastic leukemia	T-ALL	84	T-cell group	174	T-ALL	T-ALL	TL_group
+Chronic myelomonocytic leukaemia	CMML	142	CMML	142	CMML	CMML	CMML
+Mastocytosis	Mastocytosis	98	Mastocytosis	98	Mastozytose	Mastozytose	Mast_group
+Hairy cell leukemia	HCL	68	Hairy-cell group	97	HZL	HZL	HZL_group
+Hairy cell leukemia variant	HCL-V	29	Hairy-cell group	97	vHZL	HZL-V	HZL_group
+Chronic myeloid leukemia	CML	92	CML	92	CML	CML	CML
+Chronic lymphoproliferative disorder of natural killer cells	CLPD-NK	58	NK	58	NK	CLPD-NK	NK
