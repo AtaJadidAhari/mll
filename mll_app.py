@@ -34,7 +34,11 @@ fkpm_agg_tab = pd.read_csv("./data/sup_table/fpkm_tab.csv", sep=',')
 sample_summary_tab = pd.read_csv("./data/agg_table/sample_summary_tab.csv", sep=',')
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
+manuscript_wording = manuscript_wording.drop(["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis"], axis = 1)
 
+manuscript_wording = manuscript_wording.rename(columns = {"Cohort": "Disease entity", 
+															"Cohort abbreviation": "Abbreviation", 
+															"Number of sampples per cohort": "Number of samples per disease entity",})
 
 def age_distribution():
     subset = sample_summary_tab.iloc[:, [0, 2, 3]]
@@ -57,6 +61,7 @@ external_stylesheets = [dbc.themes.BOOTSTRAP]
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+app.scripts.config.serve_locally=True
 # Define the layout of the app
 app.layout = dbc.Container([
     dbc.Card([
@@ -65,6 +70,20 @@ app.layout = dbc.Container([
             "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes.", ),
         html.A("https://doi.org/10.1101/2023.08.08.23293420", href="https://doi.org/10.1101/2023.08.08.23293420",
                target="_blank"),
+    ]),
+    
+    	# manuscript wording
+    dbc.Card([
+        html.H2(["Manuscript abbreviation table"], style={'textAlign': 'center'}),
+        dash_table.DataTable(id='manuscript_wording_table',
+                             columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
+                             data=manuscript_wording.to_dict('records'),
+                             page_size=10,  # Show 10 rows per page
+                             sort_action='native',  # Enable column sorting
+                             filter_action='native',  # Enable built-in filtering
+                             style_table={'height': '300px', 'overflowY': 'auto'}
+                             # Set table height and enable scrolling
+                             )
     ]),
 
     # Number of filtered variants per sample
@@ -102,7 +121,7 @@ app.layout = dbc.Container([
     # Number of filtered variants per gene
     dbc.Card([
         dbc.Row([
-            html.H2(["Number of filtered variants per gene"], style={'textAlign': 'center'}),
+            html.H2(["Number of filtered variants aggregated by disease entities and genes"], style={'textAlign': 'center'}),
 
             # Sidebar layout
             dbc.Col([
@@ -134,7 +153,7 @@ app.layout = dbc.Container([
     # Number of filtered variants vep
     dbc.Card([
         dbc.Row([
-            html.H2(["Number of filtered variants vep"], style={'textAlign': 'center'}),
+            html.H2(["Number of filtered variants aggregated by disease entities and genes and VEP consequences"], style={'textAlign': 'center'}),
 
             # Sidebar layout
             dbc.Col([
@@ -208,7 +227,15 @@ app.layout = dbc.Container([
                     style={'textAlign': 'center'}),
 
             # Sidebar layout
-            dbc.Col([
+            
+
+            # Main panel layout
+            dbc.Row([      
+                dcc.Graph(
+                    id='age_bar_plot',
+                    figure=age_distribution()
+                ),
+                dbc.Col([
                 dcc.Dropdown(
                     id='drop_down_age',
                     options=[{'label': group, 'value': group} for group in sample_summary_tab['DiseaseEntity']],
@@ -216,14 +243,7 @@ app.layout = dbc.Container([
                     multi=False
                 ),
             ], width=4),
-
-            # Main panel layout
-            dbc.Row([
                 dcc.Graph(id='sample_summary_histogram'),
-                dcc.Graph(
-                    id='age_bar_plot',
-                    figure=age_distribution()
-                ),
                 dash_table.DataTable(id='sample_summary_table',
                                      columns=[{'name': col, 'id': col} for col in sample_summary_tab.columns],
                                      data=sample_summary_tab.to_dict('records'),
@@ -304,7 +324,7 @@ app.layout = dbc.Container([
     # activation
     dbc.Card([
         dbc.Row([
-            html.H2(["Number of activation outliers aggregated by disease entities and genes"],
+            html.H2(["NB-act: Number of activation outliers aggregated by disease entities and genes"],
                     style={'textAlign': 'center'}),
 
             # Sidebar layout
@@ -461,18 +481,6 @@ app.layout = dbc.Container([
         ], ),
     ], ),
 
-    dbc.Card([
-        html.H2(["Manuscript abbreviation table"], style={'textAlign': 'center'}),
-        dash_table.DataTable(id='manuscript_wording_table',
-                             columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
-                             data=manuscript_wording.to_dict('records'),
-                             page_size=10,  # Show 10 rows per page
-                             sort_action='native',  # Enable column sorting
-                             filter_action='native',  # Enable built-in filtering
-                             style_table={'height': '300px', 'overflowY': 'auto'}
-                             # Set table height and enable scrolling
-                             )
-    ]),
 
 ], )
 
@@ -657,7 +665,7 @@ def update_absplice_histogram(selected_gene):
                           value_name='Gene Expression')
 
     fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
-                 labels={'Gene Expression': 'Number of samples'},
+                 labels={'Gene Expression': 'Ratio'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -684,4 +692,4 @@ server = app.server
 
 # Run the Dash app
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8443, debug=True)
+    app.run_server(host='0.0.0.0', port=8080, debug=True)
