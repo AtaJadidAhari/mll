@@ -44,7 +44,7 @@ def age_distribution():
     subset = sample_summary_tab.iloc[:, [0, 2, 3]]
     legend_names = {'Number_of_male': 'Male', 'Number_of_female': 'Female'}
     age_fig = px.bar(subset, x='DiseaseEntity', y=['Number_of_male', 'Number_of_female'],
-                     labels={'value': 'Number of Individuals', 'variable': 'Gender'},
+                     labels={'value': 'Number of Individuals', 'variable': 'Gender', "DiseaseEntity": "Disease entity"},
                      category_orders={"Gender": ["Male", "Female"]},
                      barmode='group').update_layout(template="plotly_white")
     age_fig = age_fig.for_each_trace(lambda t: t.update(name=legend_names[t.name],
@@ -59,7 +59,7 @@ def age_distribution():
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 # Initialize the Dash app
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 
 app.scripts.config.serve_locally=True
 # Define the layout of the app
@@ -74,15 +74,15 @@ app.layout = dbc.Container([
     
     	# manuscript wording
     dbc.Card([
-        html.H2(["Manuscript abbreviation table"], style={'textAlign': 'center'}),
+        html.H2(["Abbreviation table"], style={'textAlign': 'center'}),
         dash_table.DataTable(id='manuscript_wording_table',
                              columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
                              data=manuscript_wording.to_dict('records'),
                              page_size=10,  # Show 10 rows per page
                              sort_action='native',  # Enable column sorting
                              filter_action='native',  # Enable built-in filtering
-                             style_table={'height': '300px', 'overflowY': 'auto'}
-                             # Set table height and enable scrolling
+                             style_table={'height': '300px', 'overflowY': 'auto'},
+							 export_format='csv',          					
                              )
     ]),
 
@@ -110,8 +110,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -142,8 +142,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -180,8 +180,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -212,8 +212,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -250,8 +250,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
         ], ),
@@ -282,8 +282,9 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '80%', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '80%', 'overflowY': 'auto'},
+                                     export_format='csv',   
+                                  
                                      )
             ], ),
         ], style={'justify': 'center', }),
@@ -314,8 +315,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '80%', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '80%', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
         ], style={'justify': 'center', }),
@@ -346,8 +347,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
         ], ),
@@ -379,8 +380,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
         ], ),
@@ -411,8 +412,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -443,8 +444,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             )
         ], ),
@@ -473,8 +474,8 @@ app.layout = dbc.Container([
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'}
-                                     # Set table height and enable scrolling
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',   
                                      )
             ], ),
 
@@ -518,9 +519,9 @@ def update_n_var_sample_histogram(selected_gene):
 def update__n_var_gene_histogram(selected_gene):
     gene_data_subset = n_var_gene_tab[n_var_gene_tab['GeneSymbol'] == selected_gene]
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[2:],
-                                      var_name='Disease Entity',
+                                      var_name='Disease entity',
                                       value_name='Number of variants')
-    fig = px.bar(melted_df, x='Disease Entity', y='Number of variants', color='Disease Entity',
+    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Disease entity',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -535,9 +536,9 @@ def update_n_var_vep_histogram(selected_gene, consequence):
     gene_data_subset = n_var_vep_tab[
         (n_var_vep_tab['GeneSymbol'] == selected_gene) & (n_var_vep_tab['Consequence'] == consequence)]
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[4:],
-                                      var_name='Disease Entity',
+                                      var_name='Disease entity',
                                       value_name='Number of variants')
-    fig = px.bar(melted_df, x='Disease Entity', y='Number of variants', color='Disease Entity',
+    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Disease entity',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -550,9 +551,9 @@ def update_n_var_vep_histogram(selected_gene, consequence):
 def update_fpkm_histogram(selected_gene):
     gene_data_subset = fkpm_agg_tab[fkpm_agg_tab['GeneSymbol'] == selected_gene]
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[2:],
-                                      var_name='Disease Entity',
+                                      var_name='Disease entity',
                                       value_name='FPKM expression')
-    fig = px.bar(melted_df, x='Disease Entity', y='FPKM expression', color='Disease Entity',
+    fig = px.bar(melted_df, x='Disease entity', y='FPKM expression', color='Disease entity',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -579,10 +580,10 @@ def update_sample_summary_histogram(selected_entity):
 )
 def update_or_dn_histogram(selected_gene):
     gene_data_subset = or_dn_agg_tab[or_dn_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group',
                  )
@@ -596,10 +597,10 @@ def update_or_dn_histogram(selected_gene):
 )
 def update_or_up_histogram(selected_gene):
     gene_data_subset = or_up_agg_tab[or_up_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group',
                  )
@@ -613,10 +614,10 @@ def update_or_up_histogram(selected_gene):
 )
 def update_activation_histogram(selected_gene):
     gene_data_subset = activation_agg_tab[activation_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -629,10 +630,10 @@ def update_activation_histogram(selected_gene):
 )
 def update_fraser_histogram(selected_gene):
     gene_data_subset = fraser_agg_tab[fraser_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -645,10 +646,10 @@ def update_fraser_histogram(selected_gene):
 )
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_agg_tab[absplice_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -661,10 +662,10 @@ def update_absplice_histogram(selected_gene):
 )
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_ratio_tab[absplice_ratio_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease Type',
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Ratio'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -679,10 +680,10 @@ def update_fusion_histogram(selected_gene):
     gene_data_subset = fusion_agg_tab[fusion_agg_tab['Gene_pair'] == selected_gene]
     melted_data = pd.melt(gene_data_subset,
                           id_vars=['Gene_pair', 'GeneID_1', 'GeneSymbol_1', 'GeneID_2', 'GeneSymbol_2'],
-                          var_name='Disease Type',
+                          var_name='Disease entity',
                           value_name='Gene Expression')
 
-    fig = px.bar(melted_data, x='Disease Type', y='Gene Expression', color='Disease Type',
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
