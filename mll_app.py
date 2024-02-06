@@ -61,6 +61,8 @@ external_stylesheets = [dbc.themes.BOOTSTRAP]
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 
+app.title = "MLL5kdata"
+
 app.scripts.config.serve_locally=True
 # Define the layout of the app
 app.layout = dbc.Container([
@@ -86,105 +88,39 @@ app.layout = dbc.Container([
                              )
     ]),
 
-    # Number of filtered variants per sample
+    # Number of individuals, genders, and age
     dbc.Card([
         dbc.Row([
-            html.H2(["Number of filtered variants per sample"], style={'textAlign': 'center'}),
+            html.H2(["Number of individuals, genders, and age groups aggregated by disease entities"],
+                    style={'textAlign': 'center'}),
 
             # Sidebar layout
-            dbc.Col([
-                dcc.Dropdown(
-                    id='drop_down_n_var_samp',
-                    options=[{'label': group, 'value': group} for group in np.unique(n_var_samp['DiseaseEntity'])],
-                    value='AML',
-                    multi=False
-                ),
-            ], width=4),
 
             # Main panel layout
             dbc.Row([
-                dcc.Graph(id='n_var_samp_histogram'),
-                dash_table.DataTable(id='n_var_samp_table',
-                                     columns=[{'name': col, 'id': col} for col in n_var_samp.columns],
-                                     data=n_var_samp.to_dict('records'),
+                dcc.Graph(
+                    id='age_bar_plot',
+                    figure=age_distribution()
+                ),
+                dbc.Col([
+                    dcc.Dropdown(
+                        id='drop_down_age',
+                        options=[{'label': group, 'value': group} for group in sample_summary_tab['DiseaseEntity']],
+                        value='AML',
+                        multi=False
+                    ),
+                ], width=4),
+                dcc.Graph(id='sample_summary_histogram'),
+                dash_table.DataTable(id='sample_summary_table',
+                                     columns=[{'name': col, 'id': col} for col in sample_summary_tab.columns],
+                                     data=sample_summary_tab.to_dict('records'),
                                      page_size=10,  # Show 10 rows per page
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
                                      style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',   
+                                     export_format='csv',
                                      )
             ], ),
-
-        ], ),
-    ], ),
-
-    # Number of filtered variants per gene
-    dbc.Card([
-        dbc.Row([
-            html.H2(["Number of filtered variants aggregated by disease entities and genes"], style={'textAlign': 'center'}),
-
-            # Sidebar layout
-            dbc.Col([
-                dcc.Dropdown(
-                    id='drop_down_n_var_gene',
-                    options=[{'label': group, 'value': group} for group in n_var_gene_tab['GeneSymbol']],
-                    value='EYS',
-                    multi=False
-                ),
-            ], width=4),
-
-            # Main panel layout
-            dbc.Row([
-                dcc.Graph(id='n_var_gene_histogram'),
-                dash_table.DataTable(id='n_var_gene_table',
-                                     columns=[{'name': col, 'id': col} for col in n_var_gene_tab.columns],
-                                     data=n_var_gene_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',   
-                                     )
-            ], ),
-
-        ], ),
-    ], ),
-
-    # Number of filtered variants vep
-    dbc.Card([
-        dbc.Row([
-            html.H2(["Number of filtered variants aggregated by disease entities and genes and VEP consequences"], style={'textAlign': 'center'}),
-
-            # Sidebar layout
-            dbc.Col([
-                dcc.Dropdown(
-                    id='drop_down_n_var_vep_gene',
-                    options=[{'label': group, 'value': group} for group in n_var_vep_tab['GeneSymbol']],
-                    value='MMRN1',
-                    multi=False
-                ),
-            ], width=4),
-            dbc.Col([
-                dcc.Dropdown(
-                    id='drop_down_n_var_vep_consequence',
-                    multi=False
-                ),
-            ], width=4),
-
-            # Main panel layout
-            dbc.Row([
-                dcc.Graph(id='n_var_vep_histogram'),
-                dash_table.DataTable(id='n_var_vep_table',
-                                     columns=[{'name': col, 'id': col} for col in n_var_vep_tab.columns],
-                                     data=n_var_vep_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',   
-                                     )
-            ], ),
-
         ], ),
     ], ),
 
@@ -217,43 +153,6 @@ app.layout = dbc.Container([
                                      )
             ], ),
 
-        ], ),
-    ], ),
-
-    # Number of individuals, genders, and age
-    dbc.Card([
-        dbc.Row([
-            html.H2(["Number of individuals, genders, and age groups aggregated by disease entities"],
-                    style={'textAlign': 'center'}),
-
-            # Sidebar layout
-            
-
-            # Main panel layout
-            dbc.Row([      
-                dcc.Graph(
-                    id='age_bar_plot',
-                    figure=age_distribution()
-                ),
-                dbc.Col([
-                dcc.Dropdown(
-                    id='drop_down_age',
-                    options=[{'label': group, 'value': group} for group in sample_summary_tab['DiseaseEntity']],
-                    value='AML',
-                    multi=False
-                ),
-            ], width=4),
-                dcc.Graph(id='sample_summary_histogram'),
-                dash_table.DataTable(id='sample_summary_table',
-                                     columns=[{'name': col, 'id': col} for col in sample_summary_tab.columns],
-                                     data=sample_summary_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',   
-                                     )
-            ], ),
         ], ),
     ], ),
 
@@ -451,6 +350,109 @@ app.layout = dbc.Container([
         ], ),
     ], ),
 
+# Number of filtered variants per sample
+    dbc.Card([
+        dbc.Row([
+            html.H2(["Number of filtered variants per sample"], style={'textAlign': 'center'}),
+
+            # Sidebar layout
+            dbc.Col([
+                dcc.Dropdown(
+                    id='drop_down_n_var_samp',
+                    options=[{'label': group, 'value': group} for group in np.unique(n_var_samp['DiseaseEntity'])],
+                    value='AML',
+                    multi=False
+                ),
+            ], width=4),
+
+            # Main panel layout
+            dbc.Row([
+                dcc.Graph(id='n_var_samp_histogram'),
+                dash_table.DataTable(id='n_var_samp_table',
+                                     columns=[{'name': col, 'id': col} for col in n_var_samp.columns],
+                                     data=n_var_samp.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',
+                                     )
+            ], ),
+
+        ], ),
+    ], ),
+
+    # Number of filtered variants per gene
+    dbc.Card([
+        dbc.Row([
+            html.H2(["Number of filtered variants aggregated by disease entities and genes"], style={'textAlign': 'center'}),
+
+            # Sidebar layout
+            dbc.Col([
+                dcc.Dropdown(
+                    id='drop_down_n_var_gene',
+                    options=[{'label': group, 'value': group} for group in n_var_gene_tab['GeneSymbol']],
+                    value='EYS',
+                    multi=False
+                ),
+            ], width=4),
+
+            # Main panel layout
+            dbc.Row([
+                dcc.Graph(id='n_var_gene_histogram'),
+                dash_table.DataTable(id='n_var_gene_table',
+                                     columns=[{'name': col, 'id': col} for col in n_var_gene_tab.columns],
+                                     data=n_var_gene_tab.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',
+                                     )
+            ], ),
+
+        ], ),
+    ], ),
+
+    # Number of filtered variants vep
+    dbc.Card([
+        dbc.Row([
+            html.H2(["Number of filtered variants aggregated by disease entities and genes and VEP consequences"], style={'textAlign': 'center'}),
+
+            # Sidebar layout
+            dbc.Col([
+                dcc.Dropdown(
+                    id='drop_down_n_var_vep_gene',
+                    options=[{'label': group, 'value': group} for group in n_var_vep_tab['GeneSymbol']],
+                    value='MMRN1',
+                    multi=False
+                ),
+            ], width=4),
+            dbc.Col([
+                dcc.Dropdown(
+                    id='drop_down_n_var_vep_consequence',
+                    multi=False
+                ),
+            ], width=4),
+
+            # Main panel layout
+            dbc.Row([
+                dcc.Graph(id='n_var_vep_histogram'),
+                dash_table.DataTable(id='n_var_vep_table',
+                                     columns=[{'name': col, 'id': col} for col in n_var_vep_tab.columns],
+                                     data=n_var_vep_tab.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',
+                                     )
+            ], ),
+
+        ], ),
+    ], ),
+
+    # Fusion
     dbc.Card([
         dbc.Row([
             html.H2(["Fusion events aggregated by disease entities and genes"], style={'textAlign': 'center'}),
@@ -475,7 +477,7 @@ app.layout = dbc.Container([
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
                                      style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',   
+                                     export_format='csv',
                                      )
             ], ),
 
