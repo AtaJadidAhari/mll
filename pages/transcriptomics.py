@@ -27,14 +27,6 @@ dash.register_page(__name__)
 
 layout = html.Div([
 
-    dbc.Card([
-        # html.H2(["MLL 5k project"]),
-        html.H3(
-            "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes.", ),
-        html.A("https://doi.org/10.1101/2023.08.08.23293420", href="https://doi.org/10.1101/2023.08.08.23293420",
-               target="_blank"),
-        html.H3("You are visiting the transcriptomics pages now")
-    ]),
 
     # Mean FPKM
     dbc.Card([

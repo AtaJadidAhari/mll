@@ -46,6 +46,20 @@ app.scripts.config.serve_locally = True
 # Define the layout of the app
 app.layout = dbc.Container([
 
+     dbc.NavbarSimple(
+            children=[
+                dbc.NavItem(dbc.NavLink("Transcriptomics", href="/transcriptomics")),
+                dbc.NavItem(dbc.NavLink("Prediction", href="/prediction")),
+                dbc.NavItem(dbc.NavLink("Genomics", href="/genomics")),   
+                dbc.NavItem(dbc.NavLink("Sample info", href="/")),          
+            ],
+            sticky="top",
+            brand="MLL5kData",
+            brand_href="/",
+            color="dark",
+            dark=True,
+        ), 
+        
     dbc.Card([
         html.H3(
             "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes.", ),
@@ -54,13 +68,8 @@ app.layout = dbc.Container([
 
 
     ]),
-    dbc.Card([
-    html.Div([
-        html.Div(
-            dcc.Link(f"{page['name']}", href=page["relative_path"])
-        ) for page in dash.page_registry.values()
-    ]),
-        ]),
+        
+   
 
 
 
