@@ -25,4 +25,10 @@ H4 {
 	border-radius: 0.5em;
 }
 
+#loading {
+    display: none !important;
+}
 
+body:has(#_pages_content[data-dash-is-loading="true"]) #loading {
+    display: flex !important;
+}

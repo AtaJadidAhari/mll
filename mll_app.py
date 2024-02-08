@@ -7,6 +7,7 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.io as pio
+import dash_loading_spinners as dls
 
 sample_summary_tab = pd.read_csv("./data/agg_table/sample_summary_tab.csv", sep=',')
 
@@ -34,8 +35,8 @@ app.layout = dbc.Container([
      dbc.NavbarSimple(id='my_vavbar',
             children=[
                 dbc.NavItem(dbc.NavLink("Driver predictor", href="/prediction")),
-                dbc.NavItem(dbc.NavLink("Rare aberrations", href="/rareAberrations",)),
-                dbc.NavItem(dbc.NavLink("Common aberrations", href="/commonAberrations")),  
+                dbc.NavItem(dbc.NavLink("Transcriptomics", href="/transcriptomics",)),
+                dbc.NavItem(dbc.NavLink("Genomics", href="/genomics")),  
                 dbc.NavItem(dbc.NavLink("Sample info", href="/", )),          
             ],
             sticky="top",
@@ -55,6 +56,7 @@ app.layout = dbc.Container([
     ]),
 
     dash.page_container,
+    dls.Hash(id='loading',fullscreen=True, show_initially=True, ),
 ], )
 
 
@@ -77,4 +79,4 @@ server = app.server
 
 # Run the Dash app
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8080, debug=False)
+    app.run_server(host='0.0.0.0', port=8080, debug=True)
