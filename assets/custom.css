@@ -8,3 +8,21 @@
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
     margin-top: 1em;
 }
+
+H2 {
+	text-align: center; 
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+H4 {
+	text-align: center; 
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+#my_vavbar{
+	border-radius: 0.5em;
+}
+
+

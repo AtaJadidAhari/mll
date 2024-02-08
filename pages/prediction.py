@@ -11,10 +11,32 @@ prediction_complete = pd.read_csv("./data/prediction/S1_prediction_complete_data
 
 prediction_strudy_group = pd.read_csv("./data/prediction/S2_prediction_study_groups.csv", sep=",")
 
+manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
+manuscript_wording = manuscript_wording.drop(
+    ["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis", "Number of samples per study group", "Number of samples per cohort"], axis=1)
+
+manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entity",
+                                                        "Cohort abbreviation": "Abbreviation",
+                                                        "Number of sampples per cohort": "Number of samples per disease entity", })
+
+
 
 dash.register_page(__name__)
 
 layout = html.Div([
+
+	dbc.Card([
+        html.H2(["Abbreviation table"], style={'textAlign': 'center'}),
+        dash_table.DataTable(id='manuscript_wording_table',
+                             columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
+                             data=manuscript_wording.to_dict('records'),
+                             page_size=10,  # Show 10 rows per page
+                             sort_action='native',  # Enable column sorting
+                             filter_action='native',  # Enable built-in filtering
+                             style_table={'height': '300px', 'overflowY': 'auto'},
+                             export_format='csv',
+                             )
+    ]),
 
     
     # Prediction all
