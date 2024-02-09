@@ -19,6 +19,11 @@ intogen_resource_tab = pd.read_csv("./data/resource_table/intogen_resource_tab.c
 
 fusion_agg_tab = pd.read_csv("./data/agg_table/fusion_agg_tab.csv", sep=',')
 
+absplice_agg_tab = pd.read_csv("./data/agg_table/absplice_agg_tab.csv", sep=",")
+
+absplice_ratio_tab = pd.read_csv("./data/agg_table/absplice_ratio_tab.csv", sep=",")
+
+absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',')
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
 manuscript_wording = manuscript_wording.drop(
@@ -151,6 +156,84 @@ layout = html.Div([
 
         ], ),
     ], ),
+
+    # abSplice
+    dbc.Card([
+        dbc.Row([
+            html.H2(["AbSplice-DNA"], ),
+            html.H4(["Number of splice-affecting variants aggregated by disease entities and genes"], ),
+
+            # Sidebar layout
+            dbc.Col([
+                dcc.Dropdown(
+                    id='absplice_dropdown',
+                    options=[{'label': gene, 'value': gene} for gene in absplice_agg_tab['GeneSymbol']],
+                    value='MGMT',
+                    multi=False
+                ),
+            ], width=4),
+
+            # Main panel layout
+            dbc.Row([
+                dcc.Graph(id='absplice_agg_tab_histogram'),
+                dash_table.DataTable(id='absplice_agg_tab',
+                                     columns=[{'name': col, 'id': col} for col in absplice_agg_tab.columns],
+                                     data=absplice_agg_tab.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',
+                                     )
+            ], ),
+            dbc.Row([
+                html.H4(["Number of splice-affecting variants per gene per entity when applying different filters"], ),
+                dash_table.DataTable(id='activation resource table',
+                                     columns=[{'name': col, 'id': col} for col in absplice_resource_tab.columns],
+                                     data=absplice_resource_tab.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '80%', 'overflowY': 'auto'},
+                                     export_format='csv',
+
+                                     )
+            ], ),
+
+        ], ),
+    ], ),
+
+    # abSplice ratio
+    dbc.Card([
+        html.H2([
+            "AbSplice-DNA"], ),
+        html.H4([
+            "Fraction of splice-affecting variants within filtered variants aggregated by disease entities and genes"], ),
+        # Sidebar layout
+        dbc.Col([
+            dcc.Dropdown(
+                id='absplice_ratio_dropdown',
+                options=[{'label': gene, 'value': gene} for gene in absplice_ratio_tab['GeneSymbol']],
+                value='UROD',
+                multi=False
+            ),
+        ], width=4),
+
+        dbc.Row([
+            dcc.Graph(id='absplice_ratio_tab_histogram'),
+            dbc.Col(
+                dash_table.DataTable(id='absplice_ratio_tab',
+                                     columns=[{'name': col, 'id': col} for col in absplice_ratio_tab.columns],
+                                     data=absplice_ratio_tab.to_dict('records'),
+                                     page_size=10,  # Show 10 rows per page
+                                     sort_action='native',  # Enable column sorting
+                                     filter_action='native',  # Enable built-in filtering
+                                     style_table={'height': '300px', 'overflowY': 'auto'},
+                                     export_format='csv',
+                                     )
+            )
+        ], ),
+    ], ),
     
     # Intogen 7 tools
     dbc.Card([
@@ -280,3 +363,35 @@ def update_fusion_histogram(selected_gene):
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
+
+@callback(
+    Output('absplice_agg_tab_histogram', 'figure'),
+    [Input('absplice_dropdown', 'value')]
+)
+def update_absplice_histogram(selected_gene):
+    gene_data_subset = absplice_agg_tab[absplice_agg_tab['GeneSymbol'] == selected_gene]
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Gene Expression')
+
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
+                 labels={'Gene Expression': 'Number of samples'},
+                 barmode='group')
+    fig.update_traces(width=1).update_layout(template="plotly_white")
+    return fig
+
+
+@callback(
+    Output('absplice_ratio_tab_histogram', 'figure'),
+    [Input('absplice_ratio_dropdown', 'value')]
+)
+def update_absplice_histogram(selected_gene):
+    gene_data_subset = absplice_ratio_tab[absplice_ratio_tab['GeneSymbol'] == selected_gene]
+    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Gene Expression')
+
+    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
+                 labels={'Gene Expression': 'Ratio'},
+                 barmode='group')
+    fig.update_traces(width=1).update_layout(template="plotly_white")
+    return fig
+

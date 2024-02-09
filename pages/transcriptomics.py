@@ -11,18 +11,15 @@ or_dn_agg_tab = pd.read_csv("./data/agg_table/or_dn_agg_tab.csv", sep=",")
 
 or_up_agg_tab = pd.read_csv("./data/agg_table/or_up_agg_tab.csv", sep=",")
 
-absplice_agg_tab = pd.read_csv("./data/agg_table/absplice_agg_tab.csv", sep=",")
 
-absplice_ratio_tab = pd.read_csv("./data/agg_table/absplice_ratio_tab.csv", sep=",")
 
 fraser_agg_tab = pd.read_csv("./data/agg_table/fraser_agg_tab.csv", sep=",")
 
 activation_agg_tab = pd.read_csv("./data/agg_table/activation_agg_tab.csv", sep=",")
 
-
 fkpm_agg_tab = pd.read_csv("./data/sup_table/fpkm_tab.csv", sep=',')
 
-absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',')
+
 activation_resource_tab = pd.read_csv("./data/resource_table/activation_resource_tab.csv", sep=',')
 fraser_resource_tab = pd.read_csv("./data/resource_table/fraser_resource_tab.csv", sep=',')
 or_up_resource_tab = pd.read_csv("./data/resource_table/or_up_resource_tab.csv", sep=',')
@@ -30,7 +27,8 @@ or_dn_resource_tab = pd.read_csv("./data/resource_table/or_dn_resource_tab.csv",
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
 manuscript_wording = manuscript_wording.drop(
-    ["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis", "Number of samples per study group", "Number of samples per cohort"], axis=1)
+    ["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis",
+     "Number of samples per study group", "Number of samples per cohort"], axis=1)
 
 manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entity",
                                                         "Cohort abbreviation": "Abbreviation",
@@ -39,8 +37,8 @@ dash.register_page(__name__)
 
 layout = html.Div([
 
-	dbc.Card([
-        html.H2(["Abbreviation table"],),
+    dbc.Card([
+        html.H2(["Abbreviation table"], ),
         dash_table.DataTable(id='manuscript_wording_table',
                              columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
                              data=manuscript_wording.to_dict('records'),
@@ -51,11 +49,11 @@ layout = html.Div([
                              export_format='csv',
                              )
     ]),
-	
+
     # Mean FPKM
     dbc.Card([
         dbc.Row([
-            html.H2(["Mean FPKM matrix aggregated by disease entities and genes"],),
+            html.H2(["Mean FPKM matrix aggregated by disease entities and genes"], ),
 
             # Sidebar layout
             dbc.Col([
@@ -88,7 +86,7 @@ layout = html.Div([
     dbc.Card([
         dbc.Row([
             html.H2(["OUTRIDER"]),
-            html.H4(["Number of  underexpression outliers aggregated by disease entities and genes"],),
+            html.H4(["Number of  underexpression outliers aggregated by disease entities and genes"], ),
             # Sidebar layout
             dbc.Col([
                 dcc.Dropdown(
@@ -115,7 +113,7 @@ layout = html.Div([
                                      )
             ], ),
             dbc.Col([
-            	 html.H4(["Number of underexpression outliers per gene per entity when applying different filters"],),
+                html.H4(["Number of underexpression outliers per gene per entity when applying different filters"], ),
                 dash_table.DataTable(id='or_dn resource table',
                                      columns=[{'name': col, 'id': col} for col in or_dn_resource_tab.columns],
                                      data=or_dn_resource_tab.to_dict('records'),
@@ -133,8 +131,8 @@ layout = html.Div([
     # or_up aggregated table
     dbc.Card([
         dbc.Row([
-            html.H2(["OUTRIDER"],),
-            html.H4(["Number of  overexpression outliers aggregated by disease entities and genes"],),
+            html.H2(["OUTRIDER"], ),
+            html.H4(["Number of  overexpression outliers aggregated by disease entities and genes"], ),
             # Sidebar layout
             dbc.Col([
                 dcc.Dropdown(
@@ -160,7 +158,7 @@ layout = html.Div([
                                      )
             ], ),
             dbc.Col([
-            	 html.H4(["Number of overexpression outliers per gene per entity when applying different filters"],),
+                html.H4(["Number of overexpression outliers per gene per entity when applying different filters"], ),
                 dash_table.DataTable(id='or_up resource table',
                                      columns=[{'name': col, 'id': col} for col in or_up_resource_tab.columns],
                                      data=or_up_resource_tab.to_dict('records'),
@@ -172,15 +170,15 @@ layout = html.Div([
 
                                      )
             ], ),
-            
+
         ], style={'justify': 'center', }),
     ], ),
 
     # activation
     dbc.Card([
         dbc.Row([
-            html.H2(["NB-act"],),
-			html.H4(["Number of activation outliers aggregated by disease entities and genes"],),
+            html.H2(["NB-act"], ),
+            html.H4(["Number of activation outliers aggregated by disease entities and genes"], ),
             # Sidebar layout
             dbc.Col([
                 dcc.Dropdown(
@@ -205,7 +203,7 @@ layout = html.Div([
                                      )
             ], ),
             dbc.Row([
-            	 html.H4(["Number of activation outliers per gene per entity when applying different filters"],),
+                html.H4(["Number of activation outliers per gene per entity when applying different filters"], ),
                 dash_table.DataTable(id='activation resource table',
                                      columns=[{'name': col, 'id': col} for col in activation_resource_tab.columns],
                                      data=activation_resource_tab.to_dict('records'),
@@ -223,8 +221,8 @@ layout = html.Div([
     # Fraser
     dbc.Card([
         dbc.Row([
-            html.H2(["FRASER"],),
-            html.H4(["Number of splicing outliers aggregated by disease entities and genes"],),
+            html.H2(["FRASER"], ),
+            html.H4(["Number of splicing outliers aggregated by disease entities and genes"], ),
 
             # Sidebar layout
             dbc.Col([
@@ -251,7 +249,7 @@ layout = html.Div([
                                      )
             ], ),
             dbc.Row([
-            	 html.H4(["Number of splicing outliers per gene per entity when applying different filters"],),
+                html.H4(["Number of splicing outliers per gene per entity when applying different filters"], ),
                 dash_table.DataTable(id='activation resource table',
                                      columns=[{'name': col, 'id': col} for col in fraser_resource_tab.columns],
                                      data=fraser_resource_tab.to_dict('records'),
@@ -265,84 +263,6 @@ layout = html.Div([
             ], ),
         ], ),
     ], ),
-
-    # abSplice
-    dbc.Card([
-        dbc.Row([
-            html.H2(["AbSplice-DNA"],),
-            html.H4(["Number of splice-affecting variants aggregated by disease entities and genes"],),
-
-            # Sidebar layout
-            dbc.Col([
-                dcc.Dropdown(
-                    id='absplice_dropdown',
-                    options=[{'label': gene, 'value': gene} for gene in absplice_agg_tab['GeneSymbol']],
-                    value='MGMT',
-                    multi=False
-                ),
-            ], width=4),
-
-            # Main panel layout
-            dbc.Row([
-                dcc.Graph(id='absplice_agg_tab_histogram'),
-                dash_table.DataTable(id='absplice_agg_tab',
-                                     columns=[{'name': col, 'id': col} for col in absplice_agg_tab.columns],
-                                     data=absplice_agg_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',
-                                     )
-            ], ),
-            dbc.Row([
-            	 html.H4(["Number of splice-affecting variants per gene per entity when applying different filters"], ),
-                dash_table.DataTable(id='activation resource table',
-                                     columns=[{'name': col, 'id': col} for col in absplice_resource_tab.columns],
-                                     data=absplice_resource_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '80%', 'overflowY': 'auto'},
-                                     export_format='csv',
-
-                                     )
-            ], ),
-
-        ], ),
-    ], ),
-
-    # abSplice ratio
-    dbc.Card([
-        html.H2([
-            "AbSplice-DNA"],),
-        html.H4(["Fraction of splice-affecting variants within filtered variants aggregated by disease entities and genes"],),
-        # Sidebar layout
-        dbc.Col([
-            dcc.Dropdown(
-                id='absplice_ratio_dropdown',
-                options=[{'label': gene, 'value': gene} for gene in absplice_ratio_tab['GeneSymbol']],
-                value='UROD',
-                multi=False
-            ),
-        ], width=4),
-
-        dbc.Row([
-            dcc.Graph(id='absplice_ratio_tab_histogram'),
-            dbc.Col(
-                dash_table.DataTable(id='absplice_ratio_tab',
-                                     columns=[{'name': col, 'id': col} for col in absplice_ratio_tab.columns],
-                                     data=absplice_ratio_tab.to_dict('records'),
-                                     page_size=10,  # Show 10 rows per page
-                                     sort_action='native',  # Enable column sorting
-                                     filter_action='native',  # Enable built-in filtering
-                                     style_table={'height': '300px', 'overflowY': 'auto'},
-                                     export_format='csv',
-                                     )
-            )
-        ], ),
-    ], ),
-
 
 ])
 
@@ -426,38 +346,5 @@ def update_fraser_histogram(selected_gene):
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
-
-
-@callback(
-    Output('absplice_agg_tab_histogram', 'figure'),
-    [Input('absplice_dropdown', 'value')]
-)
-def update_absplice_histogram(selected_gene):
-    gene_data_subset = absplice_agg_tab[absplice_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
-                 barmode='group')
-    fig.update_traces(width=1).update_layout(template="plotly_white")
-    return fig
-
-
-@callback(
-    Output('absplice_ratio_tab_histogram', 'figure'),
-    [Input('absplice_ratio_dropdown', 'value')]
-)
-def update_absplice_histogram(selected_gene):
-    gene_data_subset = absplice_ratio_tab[absplice_ratio_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Ratio'},
-                 barmode='group')
-    fig.update_traces(width=1).update_layout(template="plotly_white")
-    return fig
-
 
 

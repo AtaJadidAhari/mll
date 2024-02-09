@@ -19,8 +19,6 @@ manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entit
                                                         "Cohort abbreviation": "Abbreviation",
                                                         "Number of sampples per cohort": "Number of samples per disease entity", })
 
-
-
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 # Initialize the Dash app
@@ -32,31 +30,30 @@ app.scripts.config.serve_locally = True
 # Define the layout of the app
 app.layout = dbc.Container([
 
-     dbc.NavbarSimple(id='my_vavbar',
-            children=[
-                dbc.NavItem(dbc.NavLink("Driver predictor", href="/prediction")),
-                dbc.NavItem(dbc.NavLink("Transcriptomics", href="/transcriptomics",)),
-                dbc.NavItem(dbc.NavLink("Genomics", href="/genomics")),  
-                dbc.NavItem(dbc.NavLink("Sample info", href="/", )),          
-            ],
-            sticky="top",
-            brand="MLL5kData",
-            brand_href="/",
-            color="dark",
-            dark=True,
-        ), 
-        
+    dbc.NavbarSimple(id='my_vavbar',
+                     children=[
+                         dbc.NavItem(dbc.NavLink("Driver predictor", href="/prediction")),
+                         dbc.NavItem(dbc.NavLink("Transcriptomics", href="/transcriptomics", )),
+                         dbc.NavItem(dbc.NavLink("Genomics", href="/genomics")),
+                         dbc.NavItem(dbc.NavLink("Sample info", href="/", )),
+                     ],
+                     sticky="top",
+                     brand="MLL5kData",
+                     brand_href="/",
+                     color="dark",
+                     dark=True,
+                     ),
+
     dbc.Card([
         html.H3(
             "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes.", ),
         html.A("https://doi.org/10.1101/2023.08.08.23293420", href="https://doi.org/10.1101/2023.08.08.23293420",
                target="_blank"),
 
-
     ]),
 
     dash.page_container,
-    dls.Hash(id='loading',fullscreen=True, show_initially=True, ),
+    dls.Hash(id='loading', fullscreen=True, show_initially=True, ),
 ], )
 
 
