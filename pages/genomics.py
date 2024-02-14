@@ -15,7 +15,7 @@ n_var_gene_tab = pd.read_csv("./data/sup_table/n_var_gene_tab.csv", sep=',')
 
 n_var_vep_tab = pd.read_csv("./data/sup_table/n_var_vep_tab.csv", sep=',')
 
-intogen_resource_tab = pd.read_csv("./data/resource_table/intogen_resource_tab.csv", sep=',')
+intogen_resource_tab = pd.read_csv("./data/resource_table/intogen_resource_tab.csv", sep=',').drop(['Entity'], axis=1)
 
 fusion_agg_tab = pd.read_csv("./data/agg_table/fusion_agg_tab.csv", sep=',')
 
@@ -23,7 +23,7 @@ absplice_agg_tab = pd.read_csv("./data/agg_table/absplice_agg_tab.csv", sep=",")
 
 absplice_ratio_tab = pd.read_csv("./data/agg_table/absplice_ratio_tab.csv", sep=",")
 
-absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',')
+absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
 manuscript_wording = manuscript_wording.drop(
@@ -32,7 +32,8 @@ manuscript_wording = manuscript_wording.drop(
 manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entity",
                                                         "Cohort abbreviation": "Abbreviation",
                                                         "Number of sampples per cohort": "Number of samples per disease entity", })
-
+study_group_mapping_dict = manuscript_wording.set_index('Abbreviation')['Study group'].to_dict()
+study_group_mapping_dict['Total'] = 'Total'
 
 dash.register_page(__name__)
 
@@ -307,9 +308,9 @@ def update_dropdown_category2(selected_gene):
     Output('n_var_samp_histogram', 'figure'),
     [Input('drop_down_n_var_samp', 'value')]
 )
-def update_n_var_sample_histogram(selected_gene):
-    gene_data_subset = n_var_samp[n_var_samp['DiseaseEntity'] == selected_gene]
-    fig = px.scatter(gene_data_subset, y='Number_of_variant', x="AnonamizedID",
+def update_n_var_sample_histogram(selected_cohort):
+    cohort_data_subset = n_var_samp[n_var_samp['DiseaseEntity'] == selected_cohort]
+    fig = px.scatter(cohort_data_subset, y='Number_of_variant', x="AnonamizedID",
                      labels={'Number_of_variant': 'Number of variants'},
                      ).update_layout(template="plotly_white").update_xaxes(autorange="reversed")
     return fig
@@ -324,7 +325,8 @@ def update__n_var_gene_histogram(selected_gene):
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[2:],
                                       var_name='Disease entity',
                                       value_name='Number of variants')
-    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Disease entity',
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Study group',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -341,7 +343,8 @@ def update_n_var_vep_histogram(selected_gene, consequence):
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[4:],
                                       var_name='Disease entity',
                                       value_name='Number of variants')
-    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Disease entity',
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of variants', color='Study group',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -353,12 +356,12 @@ def update_n_var_vep_histogram(selected_gene, consequence):
 )
 def update_fusion_histogram(selected_gene):
     gene_data_subset = fusion_agg_tab[fusion_agg_tab['Gene_pair'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset,
+    melted_df = pd.melt(gene_data_subset,
                           id_vars=['Gene_pair', 'GeneID_1', 'GeneSymbol_1', 'GeneID_2', 'GeneSymbol_2'],
                           var_name='Disease entity',
                           value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Gene Expression', color='Study group',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -370,11 +373,10 @@ def update_fusion_histogram(selected_gene):
 )
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_agg_tab[absplice_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Number of samples')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -386,11 +388,10 @@ def update_absplice_histogram(selected_gene):
 )
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_ratio_tab[absplice_ratio_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Ratio'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Ratio')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Ratio', color='Study group',
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig

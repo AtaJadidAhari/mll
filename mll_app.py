@@ -38,18 +38,15 @@ app.layout = dbc.Container([
                          dbc.NavItem(dbc.NavLink("Sample info", href="/", )),
                      ],
                      sticky="top",
-                     brand="MLL5kData",
-                     brand_href="/",
                      color="dark",
                      dark=True,
                      ),
 
     dbc.Card([
         html.H3(
-            "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes.", ),
-        html.A("https://doi.org/10.1101/2023.08.08.23293420", href="https://doi.org/10.1101/2023.08.08.23293420",
-               target="_blank"),
-
+            "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes", ),
+        html.H4(["Companion website to the study: Xueqi Cao, Sandra Huber, Ata Jadid Ahari, Franziska R. Traube, Marc Seifert, Christopher C. Oakes, Polina Secheyko, Sergey Vilov, Ines Scheller, Nils Wagner, Vicente A. Yépez, Piers Blombery, Torsten Haferlach, Matthias Heinig, Leonhard Wachutka, Stephan Hutter, Julien Gagneur", html.Br(), "medRXiv: ", html.A('https://doi.org/10.1101/2023.08.08.23293420', href='https://doi.org/10.1101/2023.08.08.23293420', target='_blank'), html.Br(), "github: ", html.A('https://github.com/gagneurlab/Leukemia_outlier', href='https://github.com/gagneurlab/Leukemia_outlier', target='_blank')], style={"text-align": "left"},),
+        html.H4(["Request access to the complete data shall be done via the website of the Torsten Haferlach Leukemia Diagnostics Foundation: ", html.A('https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/', href='https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/', target='_blank')], style={"text-align": "left"},), 
     ]),
 
     dash.page_container,

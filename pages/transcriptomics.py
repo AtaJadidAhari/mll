@@ -20,10 +20,10 @@ activation_agg_tab = pd.read_csv("./data/agg_table/activation_agg_tab.csv", sep=
 fkpm_agg_tab = pd.read_csv("./data/sup_table/fpkm_tab.csv", sep=',')
 
 
-activation_resource_tab = pd.read_csv("./data/resource_table/activation_resource_tab.csv", sep=',')
-fraser_resource_tab = pd.read_csv("./data/resource_table/fraser_resource_tab.csv", sep=',')
-or_up_resource_tab = pd.read_csv("./data/resource_table/or_up_resource_tab.csv", sep=',')
-or_dn_resource_tab = pd.read_csv("./data/resource_table/or_dn_resource_tab.csv", sep=',')
+activation_resource_tab = pd.read_csv("./data/resource_table/activation_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
+fraser_resource_tab = pd.read_csv("./data/resource_table/fraser_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
+or_up_resource_tab = pd.read_csv("./data/resource_table/or_up_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
+or_dn_resource_tab = pd.read_csv("./data/resource_table/or_dn_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
 manuscript_wording = manuscript_wording.drop(
@@ -33,6 +33,9 @@ manuscript_wording = manuscript_wording.drop(
 manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entity",
                                                         "Cohort abbreviation": "Abbreviation",
                                                         "Number of sampples per cohort": "Number of samples per disease entity", })
+study_group_mapping_dict = manuscript_wording.set_index('Abbreviation')['Study group'].to_dict()
+study_group_mapping_dict['Total'] = 'Total'
+
 dash.register_page(__name__)
 
 layout = html.Div([
@@ -276,7 +279,8 @@ def update_fpkm_histogram(selected_gene):
     melted_df = gene_data_subset.melt(id_vars=['GeneSymbol'], value_vars=gene_data_subset.columns[2:],
                                       var_name='Disease entity',
                                       value_name='FPKM expression')
-    fig = px.bar(melted_df, x='Disease entity', y='FPKM expression', color='Disease entity',
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='FPKM expression', color='Study group',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -288,11 +292,10 @@ def update_fpkm_histogram(selected_gene):
 )
 def update_or_dn_histogram(selected_gene):
     gene_data_subset = or_dn_agg_tab[or_dn_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Number of samples')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -305,11 +308,10 @@ def update_or_dn_histogram(selected_gene):
 )
 def update_or_up_histogram(selected_gene):
     gene_data_subset = or_up_agg_tab[or_up_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Number of samples')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group',
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
@@ -322,11 +324,10 @@ def update_or_up_histogram(selected_gene):
 )
 def update_activation_histogram(selected_gene):
     gene_data_subset = activation_agg_tab[activation_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Number of samples')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
@@ -338,11 +339,10 @@ def update_activation_histogram(selected_gene):
 )
 def update_fraser_histogram(selected_gene):
     gene_data_subset = fraser_agg_tab[fraser_agg_tab['GeneSymbol'] == selected_gene]
-    melted_data = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Gene Expression')
-
-    fig = px.bar(melted_data, x='Disease entity', y='Gene Expression', color='Disease entity',
-                 labels={'Gene Expression': 'Number of samples'},
+    melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
+                          value_name='Number of samples')
+    melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
+    fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
