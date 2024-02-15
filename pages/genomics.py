@@ -239,7 +239,7 @@ layout = html.Div([
     # Intogen 7 tools
     dbc.Card([
         dbc.Row([
-            html.H2(["Driver prediction results from intOGen 7 tools"], style={'textAlign': 'center'}),
+            html.H2(["Driver prediction results from intOGen 7 tools"],),
             # Main panel layout
             dbc.Row([
                 dash_table.DataTable(id='intogen_resource_tab',
@@ -254,12 +254,11 @@ layout = html.Div([
             ], ),
 
         ], ),
-    ], ),
-    
-     # Fusion
+    ], ), 
+    # Fusion
     dbc.Card([
         dbc.Row([
-            html.H2(["Fusion events aggregated by disease entities and genes"], style={'textAlign': 'center'}),
+            html.H2(["Fusion events aggregated by disease entities and genes"],),
 
             # Sidebar layout
             dbc.Col([
@@ -287,6 +286,10 @@ layout = html.Div([
 
         ], ),
     ], ),
+    dbc.Card([
+    	html.H2(["Mean copy ratio track aggregated by disease entities"],),
+    	html.H4(["Mean copy ratio tracks can be downloaded from ", html.A("https://zenodo.org/records/10656715", href='https://zenodo.org/records/10656715', target='_blank'), html.Em(" under supplemantary_file/F1_copy_ratio_entity")], style={"text-align": "left"}),
+    ],),
 ]),
 
 

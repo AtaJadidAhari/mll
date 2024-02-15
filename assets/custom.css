@@ -9,6 +9,10 @@
     margin-top: 1em;
 }
 
+.card:last-of-type {
+	margin-bottom: 1em;
+}
+
 H2 {
 	text-align: center; 
 	margin-top: 0.5em;
@@ -32,3 +36,5 @@ H4 {
 body:has(#_pages_content[data-dash-is-loading="true"]) #loading {
     display: flex !important;
 }
+
+
