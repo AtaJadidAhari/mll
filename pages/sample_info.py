@@ -18,7 +18,6 @@ manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entit
                                                         "Number of sampples per cohort": "Number of samples per disease entity", })
 
 
-
 def age_distribution():
     subset = sample_summary_tab.iloc[:, [0, 2, 3]]
     legend_names = {'Number_of_male': 'Male', 'Number_of_female': 'Female'}
@@ -35,15 +34,13 @@ def age_distribution():
     return age_fig
 
 
-
 dash.register_page(__name__, path='/')
-
 
 layout = html.Div([
 
-     # manuscript wording
+    # manuscript wording
     dbc.Card([
-        html.H2(["Disease entity and study group table"],),
+        html.H2(["Disease entity and study group table"], ),
         dash_table.DataTable(id='manuscript_wording_table',
                              columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
                              data=manuscript_wording.to_dict('records'),
@@ -55,11 +52,10 @@ layout = html.Div([
                              )
     ]),
 
-
     # Number of individuals, genders, and age
     dbc.Card([
         dbc.Row([
-            html.H2(["Number of individuals, genders, and age groups aggregated by disease entities"],),
+            html.H2(["Number of individuals, genders, and age groups aggregated by disease entities"], ),
             # Main panel layout
             dbc.Row([
                 dcc.Graph(
@@ -89,5 +85,3 @@ layout = html.Div([
     ], ),
 
 ]),
-
-

@@ -7,7 +7,6 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.io as pio
 
-
 # Sample data
 n_var_samp = pd.read_csv("./data/sup_table/n_var_samp_tab.csv", sep=',')
 
@@ -23,11 +22,13 @@ absplice_agg_tab = pd.read_csv("./data/agg_table/absplice_agg_tab.csv", sep=",")
 
 absplice_ratio_tab = pd.read_csv("./data/agg_table/absplice_ratio_tab.csv", sep=",")
 
-absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
+absplice_resource_tab = pd.read_csv("./data/resource_table/absplice_resource_tab.csv", sep=',').drop(['Study group'],
+                                                                                                     axis=1)
 
 manuscript_wording = pd.read_csv("./data/leukemie_driver_manuscript_wording-sample_annotation.tsv", sep="\t")
 manuscript_wording = manuscript_wording.drop(
-    ["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis", "Number of samples per study group", "Number of samples per cohort"], axis=1)
+    ["Cohort during analysis", "Cohort German abbreviation", "Study group during analysis",
+     "Number of samples per study group", "Number of samples per cohort"], axis=1)
 
 manuscript_wording = manuscript_wording.rename(columns={"Cohort": "Disease entity",
                                                         "Cohort abbreviation": "Abbreviation",
@@ -37,11 +38,9 @@ study_group_mapping_dict['Total'] = 'Total'
 
 dash.register_page(__name__)
 
-
 layout = html.Div([
 
-    
-   	dbc.Card([
+    dbc.Card([
         html.H2(["Abbreviation table"], style={'textAlign': 'center'}),
         dash_table.DataTable(id='manuscript_wording_table',
                              columns=[{'name': col, 'id': col} for col in manuscript_wording.columns],
@@ -53,7 +52,7 @@ layout = html.Div([
                              export_format='csv',
                              )
     ]),
-    
+
     # Number of filtered variants per sample
     dbc.Card([
         dbc.Row([
@@ -235,11 +234,11 @@ layout = html.Div([
             )
         ], ),
     ], ),
-    
+
     # Intogen 7 tools
     dbc.Card([
         dbc.Row([
-            html.H2(["Driver prediction results from intOGen 7 tools"],),
+            html.H2(["Driver prediction results from intOGen 7 tools"], ),
             # Main panel layout
             dbc.Row([
                 dash_table.DataTable(id='intogen_resource_tab',
@@ -254,11 +253,11 @@ layout = html.Div([
             ], ),
 
         ], ),
-    ], ), 
+    ], ),
     # Fusion
     dbc.Card([
         dbc.Row([
-            html.H2(["Fusion events aggregated by disease entities and genes"],),
+            html.H2(["Fusion events aggregated by disease entities and genes"], ),
 
             # Sidebar layout
             dbc.Col([
@@ -287,9 +286,12 @@ layout = html.Div([
         ], ),
     ], ),
     dbc.Card([
-    	html.H2(["Mean copy ratio track aggregated by disease entities"],),
-    	html.H4(["Mean copy ratio tracks can be downloaded from ", html.A("https://zenodo.org/records/10656715", href='https://zenodo.org/records/10656715', target='_blank'), html.Em(" under supplemantary_file/F1_copy_ratio_entity")], style={"text-align": "left"}),
-    ],),
+        html.H2(["Mean copy ratio track aggregated by disease entities"], ),
+        html.H4(["Mean copy ratio tracks can be downloaded from ",
+                 html.A("https://zenodo.org/records/10656715", href='https://zenodo.org/records/10656715',
+                        target='_blank'), html.Em(" under supplemantary_file/F1_copy_ratio_entity")],
+                style={"text-align": "left"}),
+    ], ),
 ]),
 
 
@@ -351,8 +353,8 @@ def update_n_var_vep_histogram(selected_gene, consequence):
                  )
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
-    
-    
+
+
 @callback(
     Output('fusion_agg_tab_histogram', 'figure'),
     [Input('gene_dropdown_fusion', 'value')]
@@ -360,15 +362,16 @@ def update_n_var_vep_histogram(selected_gene, consequence):
 def update_fusion_histogram(selected_gene):
     gene_data_subset = fusion_agg_tab[fusion_agg_tab['Gene_pair'] == selected_gene]
     melted_df = pd.melt(gene_data_subset,
-                          id_vars=['Gene_pair', 'GeneID_1', 'GeneSymbol_1', 'GeneID_2', 'GeneSymbol_2'],
-                          var_name='Disease entity',
-                          value_name='Gene Expression')
+                        id_vars=['Gene_pair', 'GeneID_1', 'GeneSymbol_1', 'GeneID_2', 'GeneSymbol_2'],
+                        var_name='Disease entity',
+                        value_name='Gene Expression')
     melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
     fig = px.bar(melted_df, x='Disease entity', y='Gene Expression', color='Study group',
                  labels={'Gene Expression': 'Number of samples'},
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
+
 
 @callback(
     Output('absplice_agg_tab_histogram', 'figure'),
@@ -377,7 +380,7 @@ def update_fusion_histogram(selected_gene):
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_agg_tab[absplice_agg_tab['GeneSymbol'] == selected_gene]
     melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Number of samples')
+                        value_name='Number of samples')
     melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
     fig = px.bar(melted_df, x='Disease entity', y='Number of samples', color='Study group',
                  barmode='group')
@@ -392,10 +395,9 @@ def update_absplice_histogram(selected_gene):
 def update_absplice_histogram(selected_gene):
     gene_data_subset = absplice_ratio_tab[absplice_ratio_tab['GeneSymbol'] == selected_gene]
     melted_df = pd.melt(gene_data_subset, id_vars=['GeneID', 'GeneSymbol'], var_name='Disease entity',
-                          value_name='Ratio')
+                        value_name='Ratio')
     melted_df['Study group'] = melted_df['Disease entity'].map(study_group_mapping_dict)
     fig = px.bar(melted_df, x='Disease entity', y='Ratio', color='Study group',
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
-

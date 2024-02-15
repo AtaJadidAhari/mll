@@ -11,14 +11,11 @@ or_dn_agg_tab = pd.read_csv("./data/agg_table/or_dn_agg_tab.csv", sep=",")
 
 or_up_agg_tab = pd.read_csv("./data/agg_table/or_up_agg_tab.csv", sep=",")
 
-
-
 fraser_agg_tab = pd.read_csv("./data/agg_table/fraser_agg_tab.csv", sep=",")
 
 activation_agg_tab = pd.read_csv("./data/agg_table/activation_agg_tab.csv", sep=",")
 
 fkpm_agg_tab = pd.read_csv("./data/sup_table/fpkm_tab.csv", sep=',')
-
 
 activation_resource_tab = pd.read_csv("./data/resource_table/activation_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
 fraser_resource_tab = pd.read_csv("./data/resource_table/fraser_resource_tab.csv", sep=',').drop(['Study group'], axis=1)
@@ -346,5 +343,3 @@ def update_fraser_histogram(selected_gene):
                  barmode='group')
     fig.update_traces(width=1).update_layout(template="plotly_white")
     return fig
-
-
