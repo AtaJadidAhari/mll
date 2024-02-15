@@ -45,8 +45,27 @@ app.layout = dbc.Container([
     dbc.Card([
         html.H3(
             "Analysis of 3,760 hematologic malignancies reveals rare transcriptomic aberrations of driver genes", ),
-        html.H4(["Companion website to the study: Xueqi Cao, Sandra Huber, Ata Jadid Ahari, Franziska R. Traube, Marc Seifert, Christopher C. Oakes, Polina Secheyko, Sergey Vilov, Ines Scheller, Nils Wagner, Vicente A. Yépez, Piers Blombery, Torsten Haferlach, Matthias Heinig, Leonhard Wachutka, Stephan Hutter, Julien Gagneur", html.Br(), "medRXiv: ", html.A('https://doi.org/10.1101/2023.08.08.23293420', href='https://doi.org/10.1101/2023.08.08.23293420', target='_blank'), html.Br(), "github: ", html.A('https://github.com/gagneurlab/Leukemia_outlier', href='https://github.com/gagneurlab/Leukemia_outlier', target='_blank')], style={"text-align": "left"},),
-        html.H4(["Request access to the complete data shall be done via the website of the Torsten Haferlach Leukemia Diagnostics Foundation: ", html.A('https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/', href='https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/', target='_blank')], style={"text-align": "left"},), 
+        html.H4([
+                    "Companion website to the study: Xueqi Cao, Sandra Huber, Ata Jadid Ahari, Franziska R. Traube, Marc Seifert, Christopher C. Oakes, Polina Secheyko, Sergey Vilov, Ines Scheller, Nils Wagner, Vicente A. Yépez, Piers Blombery, Torsten Haferlach, Matthias Heinig, Leonhard Wachutka, Stephan Hutter, Julien Gagneur ",
+                    html.A('[medRXiv]', href='https://doi.org/10.1101/2023.08.08.23293420', target='_blank'),
+                    ],
+                style={"text-align": "left"}, ),
+        dbc.Row([
+            dbc.Col(
+                children=[html.A(html.Img(src="./assets/images/github-mark.png", style={'width': '50px', 'margin': 'auto'}), href="https://github.com/gagneurlab/Leukemia_outlier"),
+                          html.P("Code")],
+                width=3, style={"text-align": "center"}),
+
+            dbc.Col([html.A(html.Img(src="./assets/images/paper.png", style={'width': '50px'}), href="https://doi.org/10.1101/2023.08.08.23293420"), html.P("Paper")], width=3,
+                    style={"text-align": "center"}),
+            dbc.Col([html.A(html.Img(src="./assets/images/zenodo-black.png", style={'width': '70px'}),  href="https://zenodo.org/records/10656715"), html.P("Zenodo")],
+                    width=3, style={"text-align": "center"}),
+        ], justify="center", ),
+        html.H4([
+                    "Request access to the complete data shall be done via the website of the Torsten Haferlach Leukemia Diagnostics Foundation: ",
+                    html.A('https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/',
+                           href='https://torsten-haferlach-leukaemiediagnostik-stiftung.de/en/', target='_blank')],
+                style={"text-align": "left"}, ),
     ]),
 
     dash.page_container,
