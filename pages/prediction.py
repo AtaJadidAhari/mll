@@ -44,6 +44,7 @@ layout = html.Div([
                              sort_action='native',  # Enable column sorting
                              filter_action='native',  # Enable built-in filtering
                              style_table={'height': '300px', 'overflowY': 'auto'},
+                             style_cell={'textAlign': 'left'},
                              export_format='csv',
                              )
     ]),
@@ -67,6 +68,7 @@ layout = html.Div([
                                      sort_action='native',  # Enable column sorting
                                      filter_action='native',  # Enable built-in filtering
                                      style_table={'height': '400px', 'overflowY': 'auto'},
+                                     style_cell={'textAlign': 'left'},
                                      export_format='csv',
                                      )
             ], ),
